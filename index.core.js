@@ -1,4 +1,3 @@
-require('shelljs/global')
 var yargs = require('yargs')
 
 
