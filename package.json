@@ -1,0 +1,27 @@
+{
+  "name": "change-env-var",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha *.test.js"
+  },
+  "bin": {
+    "change-env-var": "index.js"
+  },
+  "author": "Vladimir Buskin",
+  "author": {
+    "email": "vladimir.buskin@gmail.com",
+    "name": "Vladimir Buskin",
+    "url": "github.com/vladimirbuskin"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vladimirbuskin/change-env-var.git"
+  },
+  "license": "ISC"
+}
