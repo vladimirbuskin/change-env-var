@@ -1,7 +1,7 @@
 var yargs = require('yargs')
 
 
-module.exports = function(exec) {
+module.exports = function(getVar, setVar) {
 
 
 	function exists(array, it) {
@@ -14,49 +14,48 @@ module.exports = function(exec) {
 		return (array || []).filter(x => (x + '').toLowerCase().trim() != it)
 	}
 
-	function setVar(envVar, value, cb) {
-		exec(`setx ${envVar} "${value}" /M`, (err, res) => {
-			if (err) throw err
-			cb(res)
-		})
-	}
-
-	function getVarItems(vars, v) {
-		var a = (vars[v]||'').trim()
+	function varItems(a) {
+		var a = (a||'').trim()
 		if (a === '') return []
 		return a.trim().split(';').map(x=>x.trim())
 	}
 
-	function addVariable(vars, v, it) {
-		var curItems = getVarItems(vars, v);
-		if (!exists(curItems, it)) {
-			curItems.push(it)
-			setVar(v, curItems.join(';'), function(res) {
-				console.log('successfully added');
-				console.log('will be available only after console restart');
-			})
-			return true
-		}
-		else {
-			console.log(`${it} already exists in ${v}`)
-		}
-		return false
+	function addVariable(v, it, cb) {
+        cb = cb || (()=>{})
+		getVar(v, function(err, vv) {
+			var curItems = varItems(vv)
+			if (!exists(curItems, it)) {
+				curItems.push(it)
+				setVar(v, curItems.join(';'), function(res) {
+					console.log('successfully added');
+					console.log('will be available only after console restart');
+				})
+				cb(true)
+			}
+			else {
+				console.log(`${it} already exists in ${v}`)
+				cb(false)
+			}
+		})
 	}
 
-	function removeVariable(vars, v, it) {
-		var curItems = getVarItems(vars, v);
-		var newCurItems = filter(curItems, it);
-		if (newCurItems.length != curItems.length) {
-			setVar(v, newCurItems.join(';'), function(res) {
-				console.log('successfully removed');
-				console.log('changes will be available only after console restart');
-			})
-			return true
-		}
-		else {
-			console.log(`${it} is not found in ${v} env variable`)
-		}
-		return false
+	function removeVariable(v, it, cb) {
+        cb = cb || (()=>{})
+		getVar(v, function(err, vv) {
+			var curItems = varItems(vv)
+			var newCurItems = filter(curItems, it);
+			if (newCurItems.length != curItems.length) {
+				setVar(v, newCurItems.join(';'), function(res) {
+					console.log('successfully removed');
+					console.log('changes will be available only after console restart');
+				})
+				cb(true)
+			}
+			else {
+				console.log(`${it} is not found in ${v} env variable`)
+				cb(false)
+			}
+		})
 	}
 
 	function run() {
@@ -71,7 +70,7 @@ module.exports = function(exec) {
 				var it = argv.itemValue
 				console.log(`adding ${argv.itemValue} to ${argv.envVariable}`)
 				
-				addVariable(process.env, v, it)
+				addVariable(v, it)
 			}
 		})
 		.command({
@@ -83,7 +82,7 @@ module.exports = function(exec) {
 				var it = argv.itemValue
 				console.log(`removing ${argv.itemValue} from ${argv.envVariable}`)
 
-				removeVariable(process.env, v, it)
+				removeVariable(v, it)
 			}
 		})
 		// provide a minimum demand and a minimum demand message
@@ -93,7 +92,6 @@ module.exports = function(exec) {
 		.help()
 		.argv
 
-		console.log(a)
 	}
 
 	return {

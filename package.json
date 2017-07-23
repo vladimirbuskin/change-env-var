@@ -4,16 +4,17 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "regedit": "^2.2.7",
     "yargs": "^8.0.2"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "mocha *.test.js"
+    "test": "mocha *.test.js",
+    "testWatch": "mocha *.test.js -w --inspect"
   },
   "bin": {
-    "change-env-var": "index.js"
+    "change-env-var": "bin/index.js"
   },
-  "author": "Vladimir Buskin",
   "author": {
     "email": "vladimir.buskin@gmail.com",
     "name": "Vladimir Buskin",
