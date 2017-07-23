@@ -27,14 +27,15 @@ module.exports = function(getVar, setVar) {
 			if (!exists(curItems, it)) {
 				curItems.push(it)
 				setVar(v, curItems.join(';'), function(res) {
-					console.log('successfully added');
-					console.log('will be available only after console restart');
+					console.log('SUCCESS! Env var changes will be available after console restart');
+                    console.log(`${v}="${curItems.join(';')}"`)
 				})
 				cb(true)
 			}
 			else {
-				console.log(`${it} already exists in ${v}`)
+				console.log(`WARN! ${it} already exists in ${v}`)
 				cb(false)
+                console.log(`${v}="${curItems.join(';')}"`)
 			}
 		})
 	}
@@ -46,14 +47,15 @@ module.exports = function(getVar, setVar) {
 			var newCurItems = filter(curItems, it);
 			if (newCurItems.length != curItems.length) {
 				setVar(v, newCurItems.join(';'), function(res) {
-					console.log('successfully removed');
-					console.log('changes will be available only after console restart');
+					console.log('SUCCESS! Env var changes will be available after console restart');
+                    console.log(`${v}="${newCurItems.join(';')}"`)
 				})
 				cb(true)
 			}
 			else {
-				console.log(`${it} is not found in ${v} env variable`)
+				console.log(`WARN! "${it}" is not found in "${v}" env variable`)
 				cb(false)
+                console.log(`${v}="${newCurItems.join(';')}"`)
 			}
 		})
 	}
@@ -68,7 +70,7 @@ module.exports = function(getVar, setVar) {
 				// parse
 				var v = argv.envVariable
 				var it = argv.itemValue
-				console.log(`adding ${argv.itemValue} to ${argv.envVariable}`)
+				console.log(`adding "${argv.itemValue}" to "${argv.envVariable}"`)
 				
 				addVariable(v, it)
 			}
@@ -80,7 +82,7 @@ module.exports = function(getVar, setVar) {
 				// parse
 				var v = argv.envVariable
 				var it = argv.itemValue
-				console.log(`removing ${argv.itemValue} from ${argv.envVariable}`)
+				console.log(`removing "${argv.itemValue}" from "${argv.envVariable}"`)
 
 				removeVariable(v, it)
 			}

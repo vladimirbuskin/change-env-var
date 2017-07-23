@@ -1,6 +1,6 @@
 {
   "name": "change-env-var",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -10,7 +10,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "mocha *.test.js",
-    "testWatch": "mocha *.test.js -w --inspect"
+    "testWatch": "mocha *.test.js -w",
+    "testDebug": "mocha *.test.js -w --inspect"
   },
   "bin": {
     "change-env-var": "bin/index.js"
